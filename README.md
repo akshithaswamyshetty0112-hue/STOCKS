@@ -40,28 +40,31 @@ A full-stack MERN stock trading simulator where users can register, trade virtua
 - Razorpay API integration through Axios
 
 ## Project Structure
-Individual(Stocks)/
-├── backend/
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   ├── .env
-│   ├── package.json
-│   └── server.js
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── context/
-│   │   ├── pages/
-│   │   └── services/
-│   ├── .env
-│   ├── package.json
-│   └── vite.config.js
-└── README.md
 
+```txt
+Individual(Stocks)/
+|-- backend/
+|   |-- config/
+|   |-- controllers/
+|   |-- middleware/
+|   |-- models/
+|   |-- routes/
+|   |-- services/
+|   |-- .env
+|   |-- package.json
+|   `-- server.js
+|-- frontend/
+|   |-- src/
+|   |   |-- components/
+|   |   |-- context/
+|   |   |-- pages/
+|   |   `-- services/
+|   |-- .env
+|   |-- package.json
+|   `-- vite.config.js
+|-- package.json
+`-- README.md
+```
 
 ## Prerequisites
 
@@ -74,7 +77,7 @@ Individual(Stocks)/
 
 Create or update `backend/.env`:
 
-env
+```env
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/stock_trading_simulator
 JWT_SECRET=your_jwt_secret
@@ -83,75 +86,129 @@ CLIENT_URL=http://localhost:5173
 ADMIN_EMAIL=admin@gmail.com
 RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
-
+```
 
 Create or update `frontend/.env`:
 
-env
+```env
 VITE_API_URL=http://localhost:5000/api
 VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
+```
 
+Do not commit real secrets to GitHub.
 
 ## Installation
 
 Install backend dependencies:
 
+```bash
 cd backend
 npm install
-
+```
 
 Install frontend dependencies:
 
-
+```bash
 cd frontend
 npm install
-## Running the Project
+```
+
+## Running Locally
 
 Start the backend server:
 
-
+```bash
 cd backend
 npm run dev
-
+```
 
 The backend runs on:
 
-
+```txt
 http://localhost:5000
+```
+
 Start the frontend development server:
 
-
+```bash
 cd frontend
 npm run dev
-
+```
 
 The frontend runs on:
 
-
+```txt
 http://localhost:5173
+```
 
+## Deploying on Render
+
+This repository contains separate backend and frontend apps. You can deploy them as two Render services.
+
+### Backend Web Service
+
+If deploying from the repository root, use:
+
+```txt
+Build Command: npm run build
+Start Command: npm start
+```
+
+Add these environment variables in the Render dashboard:
+
+```env
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_jwt_secret
+CLIENT_URL=your_frontend_url
+ADMIN_EMAIL=admin@gmail.com
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+```
+
+Do not use `mongodb://127.0.0.1:27017/...` on Render. Use MongoDB Atlas or another hosted MongoDB connection string.
+
+### Frontend Static Site
+
+Use these Render settings:
+
+```txt
+Root Directory: frontend
+Build Command: npm install && npm run build
+Publish Directory: dist
+```
+
+Add these frontend environment variables:
+
+```env
+VITE_API_URL=https://your-backend-service.onrender.com/api
+VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
+```
 
 ## Available Scripts
 
+### Root
+
+```bash
+npm run build
+npm start
+```
+
+The root scripts install and start the backend for deployment platforms.
+
 ### Backend
 
-
+```bash
 npm run dev
-
-
-Starts the backend with Nodemon.
-
-
 npm start
-
-
-Starts the backend with Node.
+```
 
 ### Frontend
 
-
+```bash
 npm run dev
-
+npm run build
+npm run preview
+```
 
 ## API Overview
 
@@ -179,7 +236,8 @@ Main backend route groups:
 - Restart the backend after changing `backend/.env`.
 - Restart the frontend after changing `frontend/.env`.
 - Use Razorpay test keys during development.
-- MongoDB must be running before starting the backend.
+- MongoDB must be running before starting the backend locally.
+- Render needs environment variables configured in the dashboard; it does not read your local `.env` files.
 
 ## License
 
