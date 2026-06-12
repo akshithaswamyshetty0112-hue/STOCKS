@@ -28,16 +28,23 @@ const allowedOrigins = [
   process.env.CLIENT_URL,
   "http://localhost:5173",
   "https://stocks-xi-ten.vercel.app",
-  "https://stocks-x9byfyv7a-akshithaswamyshetty0112-hues-projects.vercel.app",
 ].filter(Boolean);
-const vercelOriginPattern = /^https:\/\/[^/]+\.vercel\.app$/;
+
+// Allow all Vercel deployments
+const vercelOriginPattern = /^https:\/\/.*\.vercel\.app$/;
 
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
+    // Allow requests with no origin (Postman, mobile apps, etc.)
+    if (!origin) {
+      return callback(null, true);
+    }
 
-    if (allowedOrigins.includes(origin) || vercelOriginPattern.test(origin)) {
-      return callback(null, origin);
+    if (
+      allowedOrigins.includes(origin) ||
+      vercelOriginPattern.test(origin)
+    ) {
+      return callback(null, true);
     }
 
     return callback(
@@ -45,23 +52,12 @@ const corsOptions = {
     );
   },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: [
-    "Authorization",
-    "Content-Type",
-    "Accept",
-    "Origin",
-    "X-Requested-With",
-  ],
-  optionsSuccessStatus: 200,
 };
 
-app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
-
 app.use(express.json());
 
-// Health check route
+// Health check
 app.get("/", (req, res) => {
   res.send("Stock Trading Simulator API is running");
 });
