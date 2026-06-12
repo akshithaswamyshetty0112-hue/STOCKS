@@ -9,20 +9,46 @@ const getStocks = async (req, res) => {
   }
 };
 
+const getStockBySymbol = async (req, res) => {
+  try {
+    const stock = await Stock.findOne({
+      symbol: req.params.symbol.toUpperCase(),
+    });
+
+    if (!stock) {
+      return res.status(404).json({ message: "Stock not found" });
+    }
+
+    res.json(stock);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const getStockHistory = async (req, res) => {
   try {
-    const stock = await Stock.findOne({ symbol: req.params.symbol.toUpperCase() });
-    if (!stock) return res.status(404).json({ message: "Stock not found" });
-    
+    const stock = await Stock.findOne({
+      symbol: req.params.symbol.toUpperCase(),
+    });
+
+    if (!stock) {
+      return res.status(404).json({ message: "Stock not found" });
+    }
+
     const history = (stock.priceHistory || [])
       .slice(-96)
       .map((h, idx) => ({
         time: idx,
         price: h.price,
-        timestamp: h.timestamp
+        timestamp: h.timestamp,
       }));
-    
-    res.json({ symbol: stock.symbol, company: stock.company, history, trend: stock.trend });
+
+    res.json({
+      symbol: stock.symbol,
+      company: stock.company,
+      history,
+      trend: stock.trend,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -30,5 +56,6 @@ const getStockHistory = async (req, res) => {
 
 module.exports = {
   getStocks,
-  getStockHistory
+  getStockBySymbol,
+  getStockHistory,
 };
