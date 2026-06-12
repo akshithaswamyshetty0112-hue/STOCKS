@@ -26,7 +26,9 @@ const PORT = process.env.PORT || 5000;
 // Allowed frontend URLs
 const allowedOrigins = [
   process.env.CLIENT_URL,
-  "http://localhost:5173"
+  "http://localhost:5173",
+  "https://stocks-xi-ten.vercel.app",
+  "https://stocks-x9byfyv7a-akshithaswamyshetty0112-hues-projects.vercel.app",
 ].filter(Boolean);
 const vercelOriginPattern = /^https:\/\/[^/]+\.vercel\.app$/;
 
