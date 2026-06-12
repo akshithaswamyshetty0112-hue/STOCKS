@@ -5,6 +5,6 @@ const protect = require("../middleware/authMiddleware");
 const router = express.Router();
 
 router.get("/", protect, getStocks);
-router.get("/:symbol/history", protect, getStockHistory);
+router.get("/quote/:symbol/history", protect, getStockHistory);
 
 module.exports = router;
