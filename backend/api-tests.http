@@ -1,0 +1,119 @@
+@baseUrl = http://localhost:5000
+@token = paste_jwt_token_here
+
+### Health check
+GET {{baseUrl}}/
+
+### Register
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Demo User",
+  "email": "demo@example.com",
+  "password": "password123"
+}
+
+### Login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "demo@example.com",
+  "password": "password123"
+}
+
+### Get logged in user
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{token}}
+
+### Get stocks
+GET {{baseUrl}}/api/stocks
+Authorization: Bearer {{token}}
+
+### Get portfolio
+GET {{baseUrl}}/api/portfolio
+Authorization: Bearer {{token}}
+
+### Buy stock
+POST {{baseUrl}}/api/portfolio/buy
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "symbol": "AAPL",
+  "quantity": 2
+}
+
+### Sell stock
+POST {{baseUrl}}/api/portfolio/sell
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "symbol": "AAPL",
+  "quantity": 1
+}
+
+### Get transactions
+GET {{baseUrl}}/api/transactions
+Authorization: Bearer {{token}}
+
+### Get market status
+GET {{baseUrl}}/api/market/status
+Authorization: Bearer {{token}}
+
+### Admin add stock
+POST {{baseUrl}}/api/admin/addStock
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "symbol": "MSFT",
+  "company": "Microsoft Corporation",
+  "currentPrice": 410
+}
+
+### Admin update stock
+PUT {{baseUrl}}/api/admin/updateStock
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "symbol": "MSFT",
+  "company": "Microsoft Corporation",
+  "currentPrice": 420
+}
+
+### Admin delete stock
+DELETE {{baseUrl}}/api/admin/deleteStock
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "symbol": "MSFT"
+}
+
+### Admin all users
+GET {{baseUrl}}/api/admin/allUsers
+Authorization: Bearer {{token}}
+
+### Admin all transactions
+GET {{baseUrl}}/api/admin/allTransactions
+Authorization: Bearer {{token}}
+
+### Admin reset market
+POST {{baseUrl}}/api/admin/resetMarket
+Authorization: Bearer {{token}}
+
+### Admin trigger market simulation
+POST {{baseUrl}}/api/admin/triggerMarketSimulation
+Authorization: Bearer {{token}}
+
+### Admin analytics
+GET {{baseUrl}}/api/admin/analytics
+Authorization: Bearer {{token}}
+
+### Admin audit logs
+GET {{baseUrl}}/api/admin/auditLogs
+Authorization: Bearer {{token}}
