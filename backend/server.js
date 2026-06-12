@@ -26,27 +26,36 @@ const PORT = process.env.PORT || 5000;
 // Allowed frontend URLs
 const allowedOrigins = [
   process.env.CLIENT_URL,
-  "http://localhost:5173",
-  "https://stocks-xi-ten.vercel.app",
+  "http://localhost:5173"
 ].filter(Boolean);
+const vercelOriginPattern = /^https:\/\/[^/]+\.vercel\.app$/;
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (Postman, mobile apps, etc.)
-      if (!origin) return callback(null, true);
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+    if (allowedOrigins.includes(origin) || vercelOriginPattern.test(origin)) {
+      return callback(null, origin);
+    }
 
-      return callback(
-        new Error(`CORS policy violation: origin ${origin} not allowed`)
-      );
-    },
-    credentials: true,
-  })
-);
+    return callback(
+      new Error(`CORS policy violation: origin ${origin} not allowed`)
+    );
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Authorization",
+    "Content-Type",
+    "Accept",
+    "Origin",
+    "X-Requested-With",
+  ],
+  optionsSuccessStatus: 200,
+};
+
+app.options("*", cors(corsOptions));
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
