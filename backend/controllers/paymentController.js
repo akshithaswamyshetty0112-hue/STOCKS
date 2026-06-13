@@ -131,7 +131,7 @@ const requestWithdrawalHandler = async (req, res) => {
       type: "WITHDRAWAL",
       amount: Number(amount),
       currency: "INR",
-      status: "PENDING",
+      status: "PROCESSED",
       bankDetails: {
         accountNumber: accountNumber.toString(),
         ifscCode: ifscCode.toString(),
