@@ -67,8 +67,10 @@ const Register = () => {
         <button className="inline-flex min-h-12 items-center justify-center rounded-md bg-teal-700 px-5 py-3 text-base font-semibold text-white transition hover:bg-teal-800" type="submit">Register</button>
       </form>
       <p className="mt-5 text-slate-500">
-        Already have an account? <Link className="font-medium text-teal-700 hover:text-teal-800" to="/login">
-        <p className="text-blue-800" >Login</p></Link>
+        Already have an account?{" "}
+        <Link className="font-medium text-teal-700 hover:text-teal-800" to="/login">
+          <span className="text-blue-800">Login</span>
+        </Link>
       </p>
     </section>
   );

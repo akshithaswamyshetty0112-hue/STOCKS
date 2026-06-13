@@ -100,9 +100,23 @@ const Navbar = () => {
               </>
             )}
             {user.role === "admin" && (
-              <NavLink className={navLinkClass} to="/admin">
-                Admin
-              </NavLink>
+              <>
+                <NavLink className={navLinkClass} to="/admin">
+                  Admin Panel
+                </NavLink>
+                <NavLink className={navLinkClass} to="/dashboard">
+                  Dashboard
+                </NavLink>
+                <NavLink className={navLinkClass} to="/stocks">
+                  Stocks
+                </NavLink>
+                <NavLink className={navLinkClass} to="/portfolio">
+                  Portfolio
+                </NavLink>
+                <NavLink className={navLinkClass} to="/transactions">
+                  Transactions
+                </NavLink>
+              </>
             )}
             <button className={secondaryButtonClass} onClick={handleLogout}>
               Logout

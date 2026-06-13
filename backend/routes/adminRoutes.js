@@ -7,6 +7,7 @@ const {
   getAnalytics,
   getAuditLogs,
   blockUser,
+  adjustUserBalance,
   resetMarketPrices,
   triggerMarketSimulation,
   updateStock
@@ -29,5 +30,7 @@ router.post("/triggerMarketSimulation", triggerMarketSimulation);
 router.get("/analytics", getAnalytics);
 router.get("/auditLogs", getAuditLogs);
 router.post("/blockUser", blockUser);
+router.post("/adjustBalance", adjustUserBalance);
 
 module.exports = router;
+

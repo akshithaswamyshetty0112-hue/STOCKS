@@ -2,6 +2,7 @@ const Stock = require("../models/Stock");
 const Transaction = require("../models/Transaction");
 const User = require("../models/User");
 const AuditLog = require("../models/AuditLog");
+const Portfolio = require("../models/Portfolio");
 const { createAuditLog } = require("../services/auditService");
 const { getMarketStatus, resetMarket, updateStockPrices } = require("../services/marketSimulation");
 
@@ -229,6 +230,11 @@ const blockUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Protect the single admin account from being blocked
+    if (user.role === "admin") {
+      return res.status(403).json({ message: "Cannot block the admin account" });
+    }
+
     user.blocked = blocked;
     await user.save();
 
@@ -245,6 +251,58 @@ const blockUser = async (req, res) => {
   }
 };
 
+const adjustUserBalance = async (req, res) => {
+  try {
+    const { userId, amount, reason } = req.body;
+
+    if (!userId || amount === undefined || isNaN(Number(amount))) {
+      return res.status(400).json({ message: "userId and numeric amount are required" });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role === "admin") {
+      return res.status(403).json({ message: "Cannot adjust admin balance" });
+    }
+
+    const adjustment = Number(amount);
+    const previousBalance = user.balance;
+    user.balance = Math.max(0, user.balance + adjustment);
+    await user.save();
+
+    // Also update portfolio balance
+    await Portfolio.findOneAndUpdate(
+      { userId: user._id },
+      { balance: user.balance }
+    );
+
+    await createAuditLog({
+      actor: req.user,
+      action: "ADMIN_ADJUST_BALANCE",
+      entity: "USER",
+      details: {
+        targetUserId: user._id,
+        targetEmail: user.email,
+        previousBalance,
+        adjustment,
+        newBalance: user.balance,
+        reason: reason || "Admin adjustment"
+      }
+    });
+
+    res.json({
+      message: `Balance ${adjustment >= 0 ? "credited" : "debited"} successfully`,
+      user: { id: user._id, name: user.name, email: user.email, balance: user.balance }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   addStock,
   updateStock,
@@ -255,5 +313,6 @@ module.exports = {
   triggerMarketSimulation,
   getAnalytics,
   getAuditLogs,
-  blockUser
+  blockUser,
+  adjustUserBalance
 };
