@@ -11,6 +11,6 @@ const router = express.Router();
 
 router.get("/", protect, getStocks);
 router.get("/:symbol", protect, getStockBySymbol);
-router.get("/quote/:symbol/history", protect, getStockHistory);
+router.get("/:symbol/history", protect, getStockHistory);
 
 module.exports = router;
